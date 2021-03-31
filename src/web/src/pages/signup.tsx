@@ -1,7 +1,4 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import { useState, SyntheticEvent, ChangeEvent } from 'react';
 import Link from 'next/link';
@@ -84,6 +81,7 @@ const SignUpPage = () => {
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const { name } = e.target;
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setUserInfo({
@@ -116,7 +114,6 @@ const SignUpPage = () => {
             handleChange={handleChange}
             agreement={userInfo.githubOwnership}
             userInfo={userInfo}
-            setUserInfo={setUserInfo}
           />
         );
       case 2:
