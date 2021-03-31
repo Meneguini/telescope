@@ -68,11 +68,10 @@ const useStyles = makeStyles((theme: Theme) =>
 type GetGitHubProps = {
   handleChange: any;
   userInfo: any;
-  setUserInfo: Function;
   agreement: boolean;
 };
 
-const GetGitHub = ({ handleChange, agreement, userInfo, setUserInfo }: GetGitHubProps) => {
+const GetGitHub = ({ handleChange, agreement, userInfo }: GetGitHubProps) => {
   const classes = useStyles();
 
   return (
@@ -106,7 +105,6 @@ const GetGitHub = ({ handleChange, agreement, userInfo, setUserInfo }: GetGitHub
             />
 
             <Button>Validate Git</Button>
-
             <TextField
               fullWidth
               id="standard-basic"
@@ -124,7 +122,7 @@ const GetGitHub = ({ handleChange, agreement, userInfo, setUserInfo }: GetGitHub
                 },
               }}
             />
-            <Button type="submit">Validate Name</Button>
+            <Button>Validate Name</Button>
           </div>
 
           <div className={classes.avatarPreview}>
