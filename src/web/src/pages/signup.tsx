@@ -30,31 +30,52 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: '0',
       backgroundColor: theme.palette.background.default,
       width: '100%',
-      height: '100vh',
+      minHeight: '100%',
       display: 'grid',
-      gridTemplateRows: '10% 70% 10% 10%',
+      gridTemplateRows: '13% 70% 13%',
+      gridGap: '1%',
       justifyItems: 'center',
       fontFamily: 'Spartan',
       position: 'relative',
-      // [theme.breakpoints.down(1200)]: {
-      //   gridTemplateRows: '10% 65% 10% 15%',
-      // },
-      // [theme.breakpoints.down(1024)]: {
-      //   // gridTemplateRows: '10% 50% 10% 30%',
-      // },
+      [theme.breakpoints.down(1024)]: {
+        gridTemplateRows: '10% 65% auto',
+      },
+      [theme.breakpoints.down(600)]: {
+        gridTemplateRows: '8% 70% auto',
+        height: '150vh',
+        // padding: '0 2em 0 2em',
+      },
     },
     title: {
       color: theme.palette.text.secondary,
       fontSize: '35px',
+      [theme.breakpoints.down(1024)]: {
+        fontSize: '30px',
+      },
+      [theme.breakpoints.down(600)]: {
+        fontSize: '26px',
+      },
     },
     infoContainer: {
       width: '100%',
+      minHeight: '100%',
+    },
+    buttonFormContainer: {
+      [theme.breakpoints.down(600)]: {
+        // alignSelf: 'center',
+      },
+    },
+    buttonsWrapper: {
+      display: 'flex',
     },
     button: {
       fontSize: '1.3em',
       padding: '1.5em',
       margin: '5px 10px',
       background: '#E0C05A',
+      [theme.breakpoints.down(1024)]: {
+        width: '50%',
+      },
     },
   })
 );
@@ -129,42 +150,44 @@ const SignUpPage = () => {
     <div className={classes.root}>
       <h1 className={classes.title}>Telescope Account</h1>
       <div className={classes.infoContainer}>{renderContent()}</div>
-      <form onSubmit={handleSubmit} autoComplete="off">
-        <div>
-          {activeStep > 0 && (
-            <Button className={classes.button} onClick={handlePrevious}>
-              Previous
-            </Button>
-          )}
-          {activeStep < 3 ? (
-            <Button
-              className={classes.button}
-              onClick={handleNext}
-              disabled={
-                // eslint-disable-next-line no-nested-ternary
-                activeStep === 1
-                  ? !userInfo.githubOwnership
-                  : activeStep === 2
-                  ? !userInfo.blogOwnership
-                  : false
-              }
-            >
-              Next
-            </Button>
-          ) : (
-            <Link href="/" passHref>
+      <div className={classes.buttonFormContainer}>
+        <form onSubmit={handleSubmit} autoComplete="off">
+          <div className={classes.buttonsWrapper}>
+            {activeStep > 0 && (
+              <Button className={classes.button} onClick={handlePrevious}>
+                Previous
+              </Button>
+            )}
+            {activeStep < 3 ? (
               <Button
                 className={classes.button}
-                onClick={() => {
-                  console.log(userInfo);
-                }}
+                onClick={handleNext}
+                disabled={
+                  // eslint-disable-next-line no-nested-ternary
+                  activeStep === 1
+                    ? !userInfo.githubOwnership
+                    : activeStep === 2
+                    ? !userInfo.blogOwnership
+                    : false
+                }
               >
-                Confirm
+                Next
               </Button>
-            </Link>
-          )}
-        </div>
-      </form>
+            ) : (
+              <Link href="/" passHref>
+                <Button
+                  className={classes.button}
+                  onClick={() => {
+                    console.log(userInfo);
+                  }}
+                >
+                  Confirm
+                </Button>
+              </Link>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

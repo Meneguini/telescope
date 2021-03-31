@@ -1,6 +1,6 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { useState } from 'react';
+import { Button, createStyles, makeStyles, Theme } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: '0',
       backgroundColor: theme.palette.background.default,
       width: '100%',
+      height: '100%',
     },
     container: {
       display: 'grid',
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       color: theme.palette.text.primary,
       width: '100%',
-      height: '50vh',
+      height: '70vh',
     },
     infoContainer: {
       display: 'grid',
@@ -64,24 +65,27 @@ type GetBlogRssProps = {
 
 const GetBlogRSS = ({ handleChange, agreement }: GetBlogRssProps) => {
   const classes = useStyles();
+  const [validateBlog, setValidateBlog] = useState(false);
   const rssExample = ['www.test1.feed.com', 'www.test2.feed.com', 'www.test3.feed.com'];
 
-  const dumbHandleChange = () => null;
+  const dumbHandleChange = () => {
+    setValidateBlog(!validateBlog);
+    console.log(validateBlog);
+  };
 
   return (
     <div className={classes.root}>
       <div className={classes.container}>
         <h1>Blog RSS</h1>
         <h2>
-          Please enter your personal blog URL then select the RSS that you want to use in Telescope
-          ecosystem.
+          Please enter your blog URL and select the RSS that you want to use in Telescope ecosystem.
         </h2>
         <div className={classes.infoContainer}>
           <div className={classes.inputsContainer}>
             <TextField
               fullWidth
               id="standard-basic"
-              label="Enter blog URL"
+              label="Blog URL"
               className={classes.inputs}
               InputProps={{
                 classes: {
@@ -94,29 +98,31 @@ const GetBlogRSS = ({ handleChange, agreement }: GetBlogRssProps) => {
                 },
               }}
             />
+            <Button onClick={dumbHandleChange}>Validate Blog</Button>
           </div>
           <div className={classes.infoContainer}>
-            <FormControl required component="fieldset">
-              <FormGroup>
-                {rssExample.map((rss) => (
-                  <FormControlLabel
-                    key={rss}
-                    control={<Checkbox checked name={rss} onChange={dumbHandleChange} />}
-                    label={<h1 className={classes.formControlLabel}>{rss}</h1>}
-                  />
-                ))}
-              </FormGroup>
-              <FormHelperText className={classes.helpMessage}>
-                You must select at least one RSS
-              </FormHelperText>
-            </FormControl>
+            {validateBlog ? (
+              <FormControl required component="fieldset">
+                <FormGroup>
+                  {rssExample.map((rss) => (
+                    <FormControlLabel
+                      key={rss}
+                      control={<Checkbox checked name={rss} onChange={dumbHandleChange} />}
+                      label={<h1 className={classes.formControlLabel}>{rss}</h1>}
+                    />
+                  ))}
+                </FormGroup>
+                <FormHelperText className={classes.helpMessage}>
+                  You must select at least one RSS
+                </FormHelperText>
+              </FormControl>
+            ) : (
+              <h3>Please validate your blog</h3>
+            )}
           </div>
         </div>
         <div>
           <FormControl required component="fieldset">
-            <FormLabel component="legend" className={classes.formLabel}>
-              I declare that I’m the owner and the maintainer of the Blog account provided:
-            </FormLabel>
             <FormGroup>
               <FormControlLabel
                 control={
@@ -126,10 +132,13 @@ const GetBlogRSS = ({ handleChange, agreement }: GetBlogRssProps) => {
                     onChange={(e) => handleChange(e)}
                   />
                 }
-                label={<h1 className={classes.formControlLabel}>Yes</h1>}
+                label={
+                  <h1 className={classes.formControlLabel}>
+                    I declare that I am the owner and the maintainer of this Blog
+                  </h1>
+                }
               />
             </FormGroup>
-            <FormHelperText>Field Required.</FormHelperText>
           </FormControl>
         </div>
       </div>
