@@ -12,9 +12,9 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       padding: '0',
       margin: '0',
-      backgroundColor: theme.palette.background.default,
+      position: 'relative',
       width: '100%',
-      height: '100%',
+      minHeight: '100%',
     },
     container: {
       display: 'grid',
@@ -22,38 +22,120 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       justifyItems: 'center',
       alignItems: 'center',
-      color: theme.palette.text.primary,
+      position: 'absolute',
+      minHeight: '100%',
       width: '100%',
-      height: '70vh',
+      [theme.breakpoints.down(600)]: {
+        width: '95%',
+        marginLeft: '2.5%',
+      },
+    },
+    blogPageTitle: {
+      fontSize: '1.5em',
+    },
+    helpText: {
+      fontSize: '1.1em',
+      lineHeight: '1.8em',
     },
     infoContainer: {
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
+      gridTemplateColumns: '55% 45%',
       textAlign: 'center',
+      gridGap: '2%',
       justifyItems: 'center',
       alignItems: 'center',
+      width: '90%',
+      [theme.breakpoints.down(600)]: {
+        gridTemplateColumns: '1fr',
+        gridGap: '8%',
+      },
     },
     inputsContainer: {
-      width: '90%',
-    },
-    inputs: {
-      margin: '1em 0',
+      width: '100%',
+      display: 'grid',
+      gridTemplateColumns: '75% 25%',
+      '& .MuiFormHelperText-root': {
+        fontSize: '0.9em',
+        color: 'black',
+      },
+      '& .MuiFormLabel-root': {
+        color: 'black',
+      },
+      '& .MuiInput-root': {
+        borderBottom: '1px solid black',
+      },
+      [theme.breakpoints.down(600)]: {
+        gridTemplateColumns: '80% 20%',
+      },
     },
     formInput: {
-      marginTop: '.2em',
-      fontSize: '1.5em',
+      fontSize: '.8em',
+      color: 'black',
     },
     formInputLabel: {
-      fontSize: '2em',
-    },
-    formLabel: {
-      fontSize: '1.5em',
+      fontSize: '1.4em',
+      color: 'black',
     },
     formControlLabel: {
-      fontSize: '1.5em',
+      fontSize: '.9em',
+      height: '10px',
+      color: '#474747',
     },
     helpMessage: {
-      fontSize: '1.5em',
+      fontSize: '.9em',
+      color: 'black',
+    },
+    button: {
+      height: '35px',
+      width: '50%',
+      alignSelf: 'center',
+      fontSize: '0.8em',
+      marginLeft: '5%',
+      background: '#121D59',
+      color: '#A0D1FB',
+      '&:hover': {
+        color: 'black',
+        border: '1px solid #121D59',
+      },
+    },
+    RssButtonContainer: {
+      width: '90%',
+      display: 'grid',
+    },
+    infoRSSContainer: {
+      border: '1px solid rgba(71, 71, 71, 0.5)',
+      minHeight: '120px',
+      maxHeight: '120px',
+      width: '100%',
+      overflowY: 'auto',
+    },
+    noBlogMessage: {
+      fontSize: '1em',
+      color: '#474747',
+      marginTop: '40px',
+    },
+    text: {
+      fontSize: '0.9em',
+      alignSelf: 'end',
+      color: '#474747',
+    },
+    RssButtonWrapper: {
+      width: '100%',
+    },
+    RssButton: {
+      width: '101%',
+      borderRadius: '0',
+      background: '#121D59',
+      color: '#A0D1FB',
+      '&:hover': {
+        color: 'black',
+        border: '1px solid #121D59',
+      },
+    },
+    agreeMessage: {
+      [theme.breakpoints.down(600)]: {
+        alignSelf: 'end',
+      },
     },
   })
 );
@@ -66,18 +148,20 @@ type GetBlogRssProps = {
 const GetBlogRSS = ({ handleChange, agreement }: GetBlogRssProps) => {
   const classes = useStyles();
   const [validateBlog, setValidateBlog] = useState(false);
+  const [validateConfirm, setValidateConfirm] = useState(false);
   const rssExample = ['www.test1.feed.com', 'www.test2.feed.com', 'www.test3.feed.com'];
 
   const dumbHandleChange = () => {
     setValidateBlog(!validateBlog);
+    setValidateConfirm(!validateConfirm);
     console.log(validateBlog);
   };
 
   return (
     <div className={classes.root}>
       <div className={classes.container}>
-        <h1>Blog RSS</h1>
-        <h2>
+        <h1 className={classes.blogPageTitle}>Blog and RSS</h1>
+        <h2 className={classes.helpText}>
           Please enter your blog URL and select the RSS that you want to use in Telescope ecosystem.
         </h2>
         <div className={classes.infoContainer}>
@@ -86,7 +170,7 @@ const GetBlogRSS = ({ handleChange, agreement }: GetBlogRssProps) => {
               fullWidth
               id="standard-basic"
               label="Blog URL"
-              className={classes.inputs}
+              helperText="Verify your Blog URL"
               InputProps={{
                 classes: {
                   input: classes.formInput,
@@ -98,30 +182,41 @@ const GetBlogRSS = ({ handleChange, agreement }: GetBlogRssProps) => {
                 },
               }}
             />
-            <Button onClick={dumbHandleChange}>Validate Blog</Button>
+            <Button className={classes.button} onClick={dumbHandleChange}>
+              Validate Blog
+            </Button>
           </div>
-          <div className={classes.infoContainer}>
-            {validateBlog ? (
-              <FormControl required component="fieldset">
-                <FormGroup>
-                  {rssExample.map((rss) => (
-                    <FormControlLabel
-                      key={rss}
-                      control={<Checkbox checked name={rss} onChange={dumbHandleChange} />}
-                      label={<h1 className={classes.formControlLabel}>{rss}</h1>}
-                    />
-                  ))}
-                </FormGroup>
-                <FormHelperText className={classes.helpMessage}>
-                  You must select at least one RSS
-                </FormHelperText>
-              </FormControl>
-            ) : (
-              <h3>Please validate your blog</h3>
-            )}
+          <div className={classes.RssButtonContainer}>
+            <div className={classes.infoRSSContainer}>
+              {validateBlog ? (
+                <FormControl required component="fieldset">
+                  <FormHelperText className={classes.helpMessage}>
+                    *You must select at least one RSS
+                  </FormHelperText>
+                  <FormGroup>
+                    {rssExample.map((rss) => (
+                      <FormControlLabel
+                        key={rss}
+                        control={<Checkbox checked name={rss} onChange={dumbHandleChange} />}
+                        label={<h1 className={classes.formControlLabel}>{rss}</h1>}
+                      />
+                    ))}
+                  </FormGroup>
+                </FormControl>
+              ) : (
+                <h3 className={classes.noBlogMessage}>Please validate your blog</h3>
+              )}
+            </div>
+            <div className={classes.RssButtonWrapper}>
+              {validateConfirm === true && (
+                <Button className={classes.RssButton} onClick={dumbHandleChange}>
+                  Confirm RSS
+                </Button>
+              )}
+            </div>
           </div>
         </div>
-        <div>
+        <div className={classes.agreeMessage}>
           <FormControl required component="fieldset">
             <FormGroup>
               <FormControlLabel
@@ -140,6 +235,9 @@ const GetBlogRSS = ({ handleChange, agreement }: GetBlogRssProps) => {
               />
             </FormGroup>
           </FormControl>
+        </div>
+        <div className={classes.text}>
+          <h3>Click NEXT to continue</h3>
         </div>
       </div>
     </div>

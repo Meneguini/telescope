@@ -7,8 +7,8 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       padding: '0',
       margin: '0',
-      backgroundColor: theme.palette.background.default,
       width: '100%',
+      position: 'relative',
       minHeight: '100%',
     },
     container: {
@@ -18,102 +18,48 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       alignItems: 'center',
       width: '100%',
-      height: '70vh',
-      [theme.breakpoints.down(1024)]: {
-        height: '65vh',
-      },
+      position: 'absolute',
+      minHeight: '100%',
       [theme.breakpoints.down(600)]: {
-        height: '90vh',
+        width: '90%',
+        marginLeft: '5%',
       },
     },
     welcomeMessage: {
-      fontSize: '1.3em',
-      alignSelf: 'start',
-      [theme.breakpoints.down(1024)]: {
-        fontSize: '1.2em',
-      },
-    },
-    userInfo: {
-      color: '#292929',
-      margin: 0,
-      padding: '1%',
-      width: '50%',
-      height: '80%',
-      fontSize: '1.2em',
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      justifyContent: 'center',
-      alignItems: 'center',
-      border: '1px solid #C5EB98',
-      background: 'rgba(197, 235, 152, 0.2)',
-      borderRadius: '5px',
-      [theme.breakpoints.down(1200)]: {
-        width: '60%',
-      },
-      [theme.breakpoints.down(1024)]: {
-        width: '70%',
-        fontSize: '1em',
-      },
-      [theme.breakpoints.down(900)]: {
-        width: '80%',
-      },
-      [theme.breakpoints.down(600)]: {
-        gridTemplateColumns: '1fr',
-        height: '90%',
-      },
-    },
-    userInfoLabel: {
-      gridColumnStart: '1',
-      gridColumnEnd: '3',
-      fontSize: '1.6em',
-      [theme.breakpoints.down(600)]: {
-        gridColumnStart: '1',
-        gridColumnEnd: '2',
-      },
-    },
-    userInfoType: {
-      color: '#525252',
+      fontSize: '0.8em',
     },
     telescopeInfo: {
-      fontSize: '1.28em',
-      textAlign: 'center',
-      alignSelf: 'end',
-      [theme.breakpoints.down(1200)]: {
-        fontSize: '1.2em',
-      },
-      [theme.breakpoints.down(1024)]: {
-        fontSize: '1em',
-      },
-      [theme.breakpoints.down(900)]: {
-        marginLeft: '20px',
-        marginRight: '20px',
-      },
+      fontSize: '0.8em',
+      lineHeight: '2.5em',
+    },
+    helpText: {
+      fontSize: '0.8em',
+      lineHeight: '2.5em',
     },
     helpButtons: {
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
+      display: 'flex',
+      justifyContent: 'center',
+      width: '100%',
     },
     button: {
       padding: '0 0.5em',
-      background: theme.palette.text.secondary,
-      color: theme.palette.secondary.main,
-      borderRadius: '50px',
-      fontSize: '1em',
+      background: '#121D59',
+      color: '#A0D1FB',
+      fontSize: '0.9em',
       margin: '0 0.5em 0em 1em',
       '&:hover': {
         color: 'black',
+        borderColor: '#121D59',
       },
-      height: '60px',
-      [theme.breakpoints.down(1200)]: {
-        height: '50px',
-      },
+      height: '30px',
     },
     text: {
-      fontSize: '1.4em',
+      fontSize: '1.04em',
       alignSelf: 'end',
-      [theme.breakpoints.down(1024)]: {
-        fontSize: '1.2em',
-      },
+      lineHeight: '2.5em',
+    },
+    helpStartText: {
+      color: '#474747',
     },
   })
 );
@@ -128,32 +74,31 @@ const Overview = () => {
     <div className={classes.root}>
       <div className={classes.container}>
         <div className={classes.welcomeMessage}>
-          <h1>Hello {user.name}</h1>
-        </div>
-        <div className={classes.userInfo}>
-          <h2 className={classes.userInfoLabel}>Follow the information that we already have:</h2>
-          <h2>
-            <b>Full Name: </b>
-            <span className={classes.userInfoType}>{user.name}</span>
-          </h2>
-          <h2>
-            <b>Email: </b>
-            <span className={classes.userInfoType}>{user.email}</span>
-          </h2>
+          <h1>Welcome</h1>
         </div>
         <div className={classes.telescopeInfo}>
+          <h2>
+            Telescope requires a number of pieces of user information, for example your Seneca
+            email, a GitHub account, a Blog, and a user display name. In the following steps we will
+            gather this information and create your account.
+          </h2>
+        </div>
+        <div className={classes.helpText}>
           <h2>If you need help to create a GitHub account and a blog page please check:</h2>
         </div>
         <div className={classes.helpButtons}>
           <Button variant="outlined" className={classes.button}>
-            How to create a personal blog
+            Create a blog
           </Button>
           <Button variant="outlined" className={classes.button}>
-            How to create a GitHub Account
+            Create a GitHub
           </Button>
         </div>
         <div className={classes.text}>
-          <h3>Click NEXT to continue:</h3>
+          <h3>Click START to login to your Seneca account and start signing up to Telescope</h3>
+          <h4 className={classes.helpStartText}>
+            * After clicking START you will be prompted to login to your Seneca account{' '}
+          </h4>
         </div>
       </div>
     </div>

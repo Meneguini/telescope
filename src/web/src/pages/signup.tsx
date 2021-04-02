@@ -4,9 +4,11 @@ import { useState, SyntheticEvent, ChangeEvent } from 'react';
 import Link from 'next/link';
 import useAuth from '../hooks/use-auth';
 import Overview from '../components/SignUp/Overview';
+import DisplayName from '../components/SignUp/DisplayName';
 import GetGitHub from '../components/SignUp/GetGitHub';
 import GetBlogRSS from '../components/SignUp/GetBlogRSS';
 import Review from '../components/SignUp/Review';
+import DynamicImage from '../components/DynamicImage';
 
 type UserInfo = {
   id?: string;
@@ -28,53 +30,74 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       padding: '0',
       margin: '0',
-      backgroundColor: theme.palette.background.default,
-      width: '100%',
-      minHeight: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      width: '100vw',
+      boxSizing: 'border-box',
+      position: 'relative',
+    },
+    imageContainer: {
+      minHeight: '100vh',
+      width: '100vw',
+      position: 'absolute',
+      top: '0',
+      bottom: '0',
+      zIndex: -1,
+      [theme.breakpoints.down(600)]: {
+        display: 'none',
+      },
+    },
+    signUpContainer: {
+      margin: '1% 0 1% 0',
       display: 'grid',
-      gridTemplateRows: '13% 70% 13%',
-      gridGap: '1%',
+      gridTemplateRows: '10% auto 13%',
+      gridGap: '2%',
       justifyItems: 'center',
       fontFamily: 'Spartan',
-      position: 'relative',
-      [theme.breakpoints.down(1024)]: {
-        gridTemplateRows: '10% 65% auto',
+      height: '420px',
+      width: '510px',
+      padding: '1%',
+      borderRadius: '5px',
+      boxShadow: '2px 4px 4px 1px rgba(0, 0, 0, 0.1)',
+      background: '#ECF5FE',
+      '@media (max-height: 500px) and (max-width: 1024px)': {
+        margin: '0 0 65px 0',
       },
       [theme.breakpoints.down(600)]: {
-        gridTemplateRows: '8% 70% auto',
-        height: '150vh',
-        // padding: '0 2em 0 2em',
+        background: 'none',
+        boxShadow: 'none',
+        minHeight: '650px',
+        height: '600px',
+        position: 'absolute',
+        top: '0px',
+        width: '100%',
+        margin: '0',
+        padding: '0',
+        gridTemplateRows: '8% auto 17%',
       },
     },
     title: {
-      color: theme.palette.text.secondary,
-      fontSize: '35px',
-      [theme.breakpoints.down(1024)]: {
-        fontSize: '30px',
-      },
-      [theme.breakpoints.down(600)]: {
-        fontSize: '26px',
-      },
+      color: '#121D59',
+      fontSize: '22px',
     },
     infoContainer: {
       width: '100%',
-      minHeight: '100%',
+      position: 'relative',
     },
-    buttonFormContainer: {
-      [theme.breakpoints.down(600)]: {
-        // alignSelf: 'center',
-      },
-    },
+    formContainer: {},
     buttonsWrapper: {
       display: 'flex',
     },
     button: {
-      fontSize: '1.3em',
-      padding: '1.5em',
+      fontSize: '1.1em',
+      padding: '1em',
       margin: '5px 10px',
       background: '#E0C05A',
-      [theme.breakpoints.down(1024)]: {
-        width: '50%',
+      '&:hover': {
+        color: 'black',
+        background: '#EBD898',
       },
     },
   })
@@ -130,6 +153,8 @@ const SignUpPage = () => {
       case 0:
         return <Overview />;
       case 1:
+        return <DisplayName />;
+      case 2:
         return (
           <GetGitHub
             handleChange={handleChange}
@@ -137,10 +162,10 @@ const SignUpPage = () => {
             userInfo={userInfo}
           />
         );
-      case 2:
-        return <GetBlogRSS handleChange={handleChange} agreement={userInfo.blogOwnership} />;
       case 3:
-        return <Review />;
+        return <GetBlogRSS handleChange={handleChange} agreement={userInfo.blogOwnership} />;
+      case 4:
+        return <Review userInfo={userInfo} />;
       default:
         return null;
     }
@@ -148,45 +173,56 @@ const SignUpPage = () => {
 
   return (
     <div className={classes.root}>
-      <h1 className={classes.title}>Telescope Account</h1>
-      <div className={classes.infoContainer}>{renderContent()}</div>
-      <div className={classes.buttonFormContainer}>
-        <form onSubmit={handleSubmit} autoComplete="off">
-          <div className={classes.buttonsWrapper}>
-            {activeStep > 0 && (
-              <Button className={classes.button} onClick={handlePrevious}>
-                Previous
-              </Button>
-            )}
-            {activeStep < 3 ? (
-              <Button
-                className={classes.button}
-                onClick={handleNext}
-                disabled={
-                  // eslint-disable-next-line no-nested-ternary
-                  activeStep === 1
-                    ? !userInfo.githubOwnership
-                    : activeStep === 2
-                    ? !userInfo.blogOwnership
-                    : false
-                }
-              >
-                Next
-              </Button>
-            ) : (
-              <Link href="/" passHref>
+      <div className={classes.imageContainer}>
+        <DynamicImage />
+      </div>
+      <div className={classes.signUpContainer}>
+        <h1 className={classes.title}>Telescope Account</h1>
+        <div className={classes.infoContainer}>{renderContent()}</div>
+        <div className={classes.formContainer}>
+          <form onSubmit={handleSubmit} autoComplete="off">
+            <div className={classes.buttonsWrapper}>
+              {activeStep > 0 && (
+                <Button className={classes.button} onClick={handlePrevious}>
+                  Previous
+                </Button>
+              )}
+              {activeStep === 0 && (
+                <Button className={classes.button} onClick={handleNext}>
+                  Start
+                </Button>
+              )}
+              {activeStep < 4 && activeStep > 0 && (
                 <Button
                   className={classes.button}
-                  onClick={() => {
-                    console.log(userInfo);
-                  }}
+                  onClick={handleNext}
+                  disabled={
+                    // eslint-disable-next-line no-nested-ternary
+                    activeStep === 2
+                      ? !userInfo.githubOwnership
+                      : activeStep === 3
+                      ? !userInfo.blogOwnership
+                      : false
+                  }
                 >
-                  Confirm
+                  Next
                 </Button>
-              </Link>
-            )}
-          </div>
-        </form>
+              )}
+              {activeStep === 4 && (
+                <Link href="/" passHref>
+                  <Button
+                    className={classes.button}
+                    onClick={() => {
+                      console.log(userInfo);
+                    }}
+                  >
+                    Confirm
+                  </Button>
+                </Link>
+              )}
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

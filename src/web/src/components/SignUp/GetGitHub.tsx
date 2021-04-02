@@ -12,9 +12,9 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       padding: '0',
       margin: '0',
-      backgroundColor: theme.palette.background.default,
       width: '100%',
-      height: '100%',
+      position: 'relative',
+      minHeight: '100%',
     },
     container: {
       display: 'grid',
@@ -23,40 +23,28 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyItems: 'center',
       alignItems: 'start',
       width: '100%',
-      height: '70vh',
-      [theme.breakpoints.down(1024)]: {
-        height: '65vh',
-      },
+      position: 'absolute',
+      minHeight: '100%',
       [theme.breakpoints.down(600)]: {
-        height: '100%',
+        width: '90%',
+        marginLeft: '5%',
       },
     },
     titlePage: {
-      fontSize: '2.6em',
-      alignSelf: 'start',
-      [theme.breakpoints.down(1024)]: {
-        fontSize: '2.4em',
-      },
-      [theme.breakpoints.down(600)]: {
-        fontSize: '2.1em',
-      },
+      fontSize: '1.5em',
+    },
+    subtitlePage: {
+      fontSize: '1.1em',
+      lineHeight: '1.8em',
     },
     infoContainer: {
       display: 'grid',
-      gridTemplateColumns: '60% 40%',
+      gridTemplateColumns: '65% 35%',
+      gridGap: '1%',
       textAlign: 'center',
       justifyItems: 'center',
       alignItems: 'center',
-      width: '50%',
-      [theme.breakpoints.down(1200)]: {
-        width: '60%',
-      },
-      [theme.breakpoints.down(1024)]: {
-        width: '70%',
-      },
-      [theme.breakpoints.down(900)]: {
-        width: '85%',
-      },
+      width: '90%',
       [theme.breakpoints.down(600)]: {
         gridTemplateColumns: '1fr',
       },
@@ -66,26 +54,27 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'grid',
       gridTemplateColumns: '80% 20%',
       '& .MuiFormHelperText-root': {
-        fontSize: '1.3em',
-        [theme.breakpoints.down(600)]: {
-          fontSize: '1.1em',
-        },
+        fontSize: '0.9em',
+        color: 'black',
+      },
+      '& .MuiFormLabel-root': {
+        color: 'black',
+      },
+      '& .MuiInput-root': {
+        borderBottom: '1px solid black',
       },
     },
     button: {
-      height: '45%',
-      width: '80%',
+      height: '35px',
+      width: '50%',
       alignSelf: 'center',
-      background: theme.palette.text.secondary,
-      color: theme.palette.secondary.main,
+      fontSize: '0.8em',
+      background: '#121D59',
+      color: '#A0D1FB',
       marginLeft: '5%',
-      marginBottom: '1em',
       '&:hover': {
         color: 'black',
-      },
-      [theme.breakpoints.down(600)]: {
-        // height: '40%',
-        width: '70%',
+        border: '1px solid #121D59',
       },
     },
     avatarPreview: {
@@ -95,58 +84,38 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyItems: 'center',
       alignItems: 'center',
       justifySelf: 'end',
-      padding: '5%',
+      padding: '6%',
       border: '1px solid rgba(71, 71, 71, 0.5)',
       borderRadius: '5px',
       [theme.breakpoints.down(600)]: {
         justifySelf: 'center',
-        padding: '2%',
-        margin: '10%',
+        padding: '3%',
+        marginTop: '5%',
       },
+    },
+    avatarTitle: {
+      fontSize: '1.2em',
     },
     username: {
-      fontSize: '1.8em',
-      [theme.breakpoints.down(600)]: {
-        fontSize: '1.6em',
-      },
-    },
-    inputs: {
-      margin: '1em 0',
+      fontSize: '1.1em',
     },
     formInput: {
-      marginTop: '.2em',
-      fontSize: '1.5em',
-      [theme.breakpoints.down(600)]: {
-        fontSize: '1.3em',
-      },
+      fontSize: '1.1em',
+      color: 'black',
     },
     formInputLabel: {
-      fontSize: '2em',
-      [theme.breakpoints.down(600)]: {
-        fontSize: '1.5em',
-      },
-    },
-    displayNameInfo: {
-      textAlign: 'start',
-      gridColumnStart: '1',
-      gridColumnEnd: '3',
-      fontSize: '1.3em',
-      [theme.breakpoints.down(600)]: {
-        fontSize: '1.1em',
-      },
+      fontSize: '1.4em',
+      color: 'black',
     },
     formControlLabel: {
-      fontSize: '1.6em',
-      height: '21px',
-      [theme.breakpoints.down(900)]: {
-        fontSize: '1.5em',
-      },
-      [theme.breakpoints.down(600)]: {
-        fontSize: '1.3em',
-      },
+      fontSize: '.9em',
+      height: '10px',
+      color: '#474747',
     },
-    checkboxAndText: {
-      margin: '5px',
+    text: {
+      fontSize: '0.9em',
+      alignSelf: 'end',
+      color: '#474747',
     },
   })
 );
@@ -164,7 +133,9 @@ const GetGitHub = ({ handleChange, agreement, userInfo }: GetGitHubProps) => {
     <div className={classes.root}>
       <div className={classes.container}>
         <h1 className={classes.titlePage}>GitHub Account</h1>
-
+        <h2 className={classes.subtitlePage}>
+          Please provide your GitHub username and preview you avatar image
+        </h2>
         <div className={classes.infoContainer}>
           <div className={classes.inputsContainer}>
             <TextField
@@ -172,7 +143,6 @@ const GetGitHub = ({ handleChange, agreement, userInfo }: GetGitHubProps) => {
               id="standard-basic"
               label="GitHub Username"
               helperText="Verify your GitHub account"
-              className={classes.inputs}
               InputProps={{
                 classes: {
                   input: classes.formInput,
@@ -184,36 +154,10 @@ const GetGitHub = ({ handleChange, agreement, userInfo }: GetGitHubProps) => {
                 },
               }}
             />
-
             <Button className={classes.button}>Validate Git</Button>
-            <TextField
-              fullWidth
-              id="standard-basic"
-              label="Display Name"
-              helperText="Choose your Telescope username"
-              name="displayName"
-              className={classes.inputs}
-              InputProps={{
-                classes: {
-                  input: classes.formInput,
-                },
-              }}
-              InputLabelProps={{
-                classes: {
-                  root: classes.formInputLabel,
-                },
-              }}
-            />
-            <Button className={classes.button}>Validate Name</Button>
-
-            <p className={classes.displayNameInfo}>
-              * Your display name will be displayed in all of your posts and interactions with other
-              users inside Telescope’s ecosystem.{' '}
-            </p>
           </div>
-
           <div className={classes.avatarPreview}>
-            <h1>Avatar Preview</h1>
+            <h1 className={classes.avatarTitle}>Avatar Preview</h1>
             <PostAvatar name={userInfo.displayName} blog="test" />
             <h2 className={classes.username}>{userInfo.displayName}</h2>
           </div>
@@ -221,7 +165,6 @@ const GetGitHub = ({ handleChange, agreement, userInfo }: GetGitHubProps) => {
         <FormControl required component="fieldset">
           <FormGroup>
             <FormControlLabel
-              className={classes.checkboxAndText}
               control={
                 <Checkbox
                   checked={agreement}
@@ -237,6 +180,9 @@ const GetGitHub = ({ handleChange, agreement, userInfo }: GetGitHubProps) => {
             />
           </FormGroup>
         </FormControl>
+        <div className={classes.text}>
+          <h3>Click NEXT to continue</h3>
+        </div>
       </div>
     </div>
   );
